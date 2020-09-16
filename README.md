@@ -13,9 +13,11 @@ You need:
 - Go
 - Docker
 
-## Setup Steps
+## Simple Setup with Docker only
 
 The following is to achieve persistent JetStream setup. The setup only considers local testing scenarios, but should be easily converted to more cloud native approach.
+
+This does not any of Go code in this repo. (It will be added as a separate document.)
 
 ### 1. Local directory setup
 
