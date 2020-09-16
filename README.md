@@ -1,6 +1,6 @@
 # Simple Setup of NATS JetStream
 
-**IMPORTANT NOTE**
+**🐳 IMPORTANT NOTE 🐳**
 
 This is a personal note of how I understand NATS JetStream offerings.
 
