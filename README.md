@@ -269,9 +269,10 @@ $ nats con info AnotherStream SomeConsumer
 <details>
 <summary>Details</summary>
 
-_To be updated_
+The subject `xyz.test` matches the "Stream" and "Consumer" setup of `xyz.*`.
+"Stream" name and "Consumer" name are defined in the JSON above.
 
-## </details>
+</details>
 
 ---
 
