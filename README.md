@@ -55,7 +55,7 @@ Create NATS configuration.
 ```bash
 $ cat << EOF > /tmp/nats-config/jetstream.conf
 jetstream {
-    store_dir: "/srv/jsm/"
+    store_dir: "/data/jsm/"
 }
 EOF
 ```
@@ -65,7 +65,7 @@ EOF
 
 This `/tmp/nats-config/jetstream.conf` is the simplest setup.
 
-It tells the NATS server to use `/srv/jsm/` directory to store the JetStream related data. This means that any data / config will be stored under this directory when file storage is used, and also recovers from the files in this directory when the NATS server starts up.
+It tells the NATS server to use `/data/jsm/` directory to store the JetStream related data. This means that any data / config will be stored under this directory when file storage is used, and also recovers from the files in this directory when the NATS server starts up.
 
 </details>
 
@@ -154,7 +154,7 @@ $ docker run \
     -it \
     -p 4222:4222 \
     --name my-jetstream-server \
-    --mount type=bind,source=/tmp/nats-vol,dst=/srv/jsm \
+    --mount type=bind,source=/tmp/nats-vol,dst=/data/jsm \
     --mount type=bind,source=/tmp/nats-config,dst=/home/nats-config \
     synadia/jsm:nightly server -c /home/nats-config/jetstream.conf\
     ; docker container rm my-jetstream-server
@@ -168,7 +168,7 @@ Docker command reference:
 - `-it`: For interactive process
 - `-p 4222:4222`: Use local port `4222` on the Docker host, and map to `4222` on Docker container
 - `--name my-jetstream-server`: Set a name so that we can use it to link another Docker container later
-- `--mount type=bind,source=/tmp/nats-vol,dst=/srv/jsm`: Volume mounting for NATS data and objects
+- `--mount type=bind,source=/tmp/nats-vol,dst=/data/jsm`: Volume mounting for NATS data and objects
 - `--mount type=bind,source=/tmp/nats-config,dst=/home/nats-config`: Volume mounting for NATS config
 - `synadia/jsm:nightly`: Docker image we are using
 - `server`: Docker CMD - this is handled by `synadia/jsm` image with `entrypoint.sh`
@@ -338,7 +338,7 @@ $ docker run \
     -it \
     -p 4222:4222 \
     --name my-jetstream-server \
-    --mount type=bind,source=/tmp/nats-vol,dst=/srv/jsm \
+    --mount type=bind,source=/tmp/nats-vol,dst=/data/jsm \
     --mount type=bind,source=/tmp/nats-config,dst=/home/nats-config \
     synadia/jsm:nightly server -c /home/nats-config/jetstream.conf\
     ; docker container rm my-jetstream-server
