@@ -157,11 +157,11 @@ Also, you will be restarting this later on, so it is better to have it on separa
 $ docker run \
     -it \
     -p 4222:4222 \
+    --rm \
     --name my-jetstream-server \
     --mount type=bind,source=/tmp/nats-vol,dst=/data/jsm \
     --mount type=bind,source=/tmp/nats-config,dst=/home/nats-config \
-    synadia/jsm:nightly server -c /home/nats-config/jetstream.conf \
-    ; docker container rm my-jetstream-server
+    synadia/jsm:nightly server -c /home/nats-config/jetstream.conf
 ```
 
 <details>
@@ -171,13 +171,13 @@ Docker command reference:
 
 - `-it`: For interactive process
 - `-p 4222:4222`: Use local port `4222` on the Docker host, and map to `4222` on Docker container
+- `-rm`: When stopping the ccontainer, remove the container, so that you can easily restart using the same container name
 - `--name my-jetstream-server`: Set a name so that we can use it to link another Docker container later
 - `--mount type=bind,source=/tmp/nats-vol,dst=/data/jsm`: Volume mounting for NATS data and objects
 - `--mount type=bind,source=/tmp/nats-config,dst=/home/nats-config`: Volume mounting for NATS config
 - `synadia/jsm:nightly`: Docker image we are using
 - `server`: Docker CMD - this is handled by `synadia/jsm` image with `entrypoint.sh`
 - `-c /home/nats-config/jetstream.conf`: Docker ARG - this is handled by `synadia/jsm` image
-- `; docker container rm my-jetstream-server`: When stopping the ccontainer, remove the container, so that you can easily restart using the same container name
 
 </details>
 
@@ -348,11 +348,11 @@ Simply use the same command as Step#5
 $ docker run \
     -it \
     -p 4222:4222 \
+    --rm \
     --name my-jetstream-server \
     --mount type=bind,source=/tmp/nats-vol,dst=/data/jsm \
     --mount type=bind,source=/tmp/nats-config,dst=/home/nats-config \
-    synadia/jsm:nightly server -c /home/nats-config/jetstream.conf \
-    ; docker container rm my-jetstream-server
+    synadia/jsm:nightly server -c /home/nats-config/jetstream.conf
 ```
 
 ---
