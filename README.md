@@ -360,3 +360,18 @@ Check "Consumer"
 ```bash
 $ nats con info AnotherStream SomeConsumer
 ```
+
+---
+
+### 13. Clean up
+
+The clean-up is straightforward.
+
+- Stop NATS server with `ctrl-C` on Step#11
+- Stop NATS client with `ctrl-D` on Step#6
+- Remove config and data files with following commands
+
+```bash
+$ rm -rf /tmp/nats-config
+$ rm -rf /tmp/nats-vol
+```
