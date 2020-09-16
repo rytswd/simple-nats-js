@@ -4,7 +4,7 @@
 
 This is a personal note of how I understand NATS JetStream offerings.
 
-Most of the information is based on my understanding, and if any wording or information does not match with the official documentation, please file an issue or PR.
+Most of the information is based on my understanding, and if any wording or information does not make sense or match the official documentation, please raise an issue or PR 🐳
 
 ## Prerequisite
 
