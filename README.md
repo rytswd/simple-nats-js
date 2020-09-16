@@ -156,7 +156,8 @@ $ docker run \
     --name my-jetstream-server \
     --mount type=bind,source=/tmp/nats-vol,dst=/srv/jsm \
     --mount type=bind,source=/tmp/nats-config,dst=/home/nats-config \
-    synadia/jsm:nightly server -c /home/nats-config/jetstream.conf; docker container rm my-jetstream-server
+    synadia/jsm:nightly server -c /home/nats-config/jetstream.conf\
+    ; docker container rm my-jetstream-server
 ```
 
 <details>
@@ -172,7 +173,7 @@ A quick Docker command reference:
 - `synadia/jsm:nightly`: Docker image we are using
 - `server`: Docker CMD - this is handled by `synadia/jsm` image with `entrypoint.sh`
 - `-c /home/nats-config/jetstream.conf`: Docker ARG - this is handled by `synadia/jsm` image
-- `; docker container rm my-jetstream-server`: When stopping the ccontainer, remove the container with the same name, so that you can easily restart using the same container name
+- `; docker container rm my-jetstream-server`: When stopping the ccontainer, remove the container, so that you can easily restart using the same container name
 
 </details>
 
@@ -181,7 +182,11 @@ A quick Docker command reference:
 ### 6. Start NATS client
 
 ```bash
-$ docker run -it --link my-jetstream-server synadia/jsm:latest
+$ docker run \
+    -it \
+    --link my-jetstream-server \
+    --mount type=bind,source=/tmp/nats-config,dst=/home/nats-config \
+    synadia/jsm:latest
 ```
 
 <details>
