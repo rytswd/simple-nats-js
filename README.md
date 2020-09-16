@@ -185,6 +185,7 @@ A quick Docker command reference:
 $ docker run \
     -it \
     --link my-jetstream-server \
+    --env NATS_URL=my-jetstream-server:4222 \
     --mount type=bind,source=/tmp/nats-config,dst=/home/nats-config \
     synadia/jsm:latest
 ```
@@ -196,6 +197,8 @@ A quick Docker command reference:
 
 - `-it`: For interactive process
 - `--link my-jetstream-server`: Link to running NATS server
+- `--env NATS_URL=my-jetstream-server:4222`: Ensure connection is made to the linked container
+- `--mount type=bind,source=/tmp/nats-config,dst=/home/nats-config`: Volume mounting for NATS config
 - `synadia/jsm:latest`: Docker image we are using - if no argument is provided, it goes to interactive shell by default
 
 ## </details>
