@@ -2,7 +2,7 @@
 
 **IMPORTANT NOTE**
 
-This is a personal note of how I understand NATS JetStream offering.
+This is a personal note of how I understand NATS JetStream offerings.
 
 Most of the information is based on my understanding, and if any wording or information does not match with the official documentation, please file an issue or PR.
 
