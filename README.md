@@ -22,8 +22,10 @@ The following is to achieve persistent JetStream setup. The setup only considers
 Create directory on local machine so that we can persist the config and data.
 
 ```bash
-$ mkdir /tmp/nats-config  # For NATS and JetStream configurations
-$ mkdir /tmp/nats-vol     # For NATS data and objects
+$ {
+    mkdir /tmp/nats-config  # For NATS and JetStream configurations
+    mkdir /tmp/nats-vol     # For NATS data and objects
+}
 ```
 
 <details>
@@ -156,7 +158,7 @@ $ docker run \
     --name my-jetstream-server \
     --mount type=bind,source=/tmp/nats-vol,dst=/data/jsm \
     --mount type=bind,source=/tmp/nats-config,dst=/home/nats-config \
-    synadia/jsm:nightly server -c /home/nats-config/jetstream.conf\
+    synadia/jsm:nightly server -c /home/nats-config/jetstream.conf \
     ; docker container rm my-jetstream-server
 ```
 
@@ -282,6 +284,11 @@ Using another terminal, verify that file storage holds the JetStream data.
 
 ```bash
 $ tree /tmp/nats-vol
+```
+
+This will result in output like the following
+
+```
 /tmp/nats-vol
 └── jetstream
     └── $G
@@ -318,6 +325,8 @@ You can see how there is a new directory `jetstream` is created under the mounte
 
 Using the terminal used for Step#5, simply kill the server with `ctrl-C`.
 
+You can try sending NATS client from Step#6 to confirm the client lost connection to the server.
+
 <details>
 <summary>Details</summary>
 
@@ -325,7 +334,7 @@ At this point, NATS client won't be able to establish connection for any command
 
 However, the data stored in "Stream", the "Consumer" ack'ed list, etc. are all kept in the file in the local machine at `/tmp/nats-vol`.
 
-## </details>
+</details>
 
 ---
 
@@ -340,7 +349,7 @@ $ docker run \
     --name my-jetstream-server \
     --mount type=bind,source=/tmp/nats-vol,dst=/data/jsm \
     --mount type=bind,source=/tmp/nats-config,dst=/home/nats-config \
-    synadia/jsm:nightly server -c /home/nats-config/jetstream.conf\
+    synadia/jsm:nightly server -c /home/nats-config/jetstream.conf \
     ; docker container rm my-jetstream-server
 ```
 
@@ -373,6 +382,8 @@ The clean-up is straightforward.
 - Remove config and data files with following commands
 
 ```bash
-$ rm -rf /tmp/nats-config
-$ rm -rf /tmp/nats-vol
+$ {
+    rm -rf /tmp/nats-config
+    rm -rf /tmp/nats-vol
+}
 ```
