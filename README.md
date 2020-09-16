@@ -1,2 +1,273 @@
-# simple-nats-js
-Simple setup of NATS JetStream
+# Simple Setup of NATS JetStream
+
+**IMPORTANT NOTE**
+
+This is a personal note of how I understand NATS JetStream offering.
+
+Most of the information is based on my understanding, and if any wording or information does not match with the official documentation, please file an issue or PR.
+
+## Prerequisite
+
+You need:
+
+- Go
+- Docker
+
+## Setup Steps
+
+The following is to achieve persistent JetStream setup. The setup only considers local testing scenarios, but should be easily converted to more cloud native approach.
+
+### 1. Local directory setup
+
+Create directory on local machine so that we can persist the data and config.
+
+```bash
+$ mkdir /tmp/nats-config  # For NATS and JetStream configurations
+$ mkdir /tmp/nats-vol     # For NATS data and objects
+```
+
+<details>
+<summary>Details</summary>
+<section style="box-shadow: 3px 3px 4px black;">
+There are 2 different items to be considered for persistent setup.
+
+- Config
+- Data
+
+#### Config
+
+The "Config" is further split into 2 phases: (1.) NATS server startup configuration, and (2.) JetStream "Stream" and "Consumer" configurations.
+
+At (1.) NATS server startup, you can provide your config to NATS to change where to store JetStream related data, and other NATS feature setup. The (2.) JetStream "Stream" and "Consumer" configurations are discussed a bit more in later section. Essentially, you can consider these as a one-time setup, and we will be using them for the first time setup.
+
+#### Data
+
+The "Data" is the actual data stored in the NATS server. This refers to the actual messages sent to the server, how many are ack'ed, etc. The NATS server handles JetStream's "Stream" and "Consumer" concepts, and if you choose to create "Stream" with File storage, these can be persisted at the NATS server with files. With the above setup, we are using `/tmp/nats-vol/` as a directory to store all the NATS JetStream data, so we can restart the NATS server without losing data or configuration.
+
+</section>
+</details>
+
+---
+
+### 2. Create NATS cocnfiguration with JetStream enabled
+
+Create NATS configuration.
+
+```bash
+$ cat << EOF > /tmp/nats-config/jetstream.conf
+jetstream {
+    store_dir: "/srv/jsm/"
+}
+EOF
+```
+
+<details>
+<summary>Details</summary>
+<section style="box-shadow: 3px 3px 4px black;">
+This `/tmp/nats-config/jetstream.conf` is the simplest setup.
+
+It tells the NATS server to use `/srv/jsm/` directory to store the JetStream related data. This means that any data / config will be stored under this directory when file storage is used, and also recovers from the files in this directory when the NATS server starts up.
+
+</section>
+</details>
+
+---
+
+### 3. Create JetStream "Stream" configuration
+
+```bash
+$ cat << EOF > /tmp/nats-config/jetstream-stream.json
+{
+  "name": "AnotherStream",
+  "subjects": ["xyz.*"],
+  "retention": "limits",
+  "max_consumers": -1,
+  "max_msgs": -1,
+  "max_bytes": -1,
+  "max_age": 0,
+  "max_msg_size": -1,
+  "storage": "file",
+  "discard": "old",
+  "num_replicas": 1,
+  "duplicate_window": 120000000000
+}
+EOF
+```
+
+<details>
+<summary>Details</summary>
+<section style="box-shadow: 3px 3px 4px black;">
+This is the JetStream "Stream" configuration. We will be creating the "Stream" later using this file.
+
+This file does not need to be persisted. This is saved under `/tmp/nats-config/jetstream-stream.json` just for the ease of the setup. It can be done within Docker image instead if you don't need to hold on to the original configuration file.
+
+Also note that the configuration will be persisted at the NATS server, so it is easy to reccreate the config file from the running NATS server.
+
+---
+
+_TODO: Add reference for each attribute_
+
+</section>
+</details>
+
+---
+
+### 4. Create JetStream "Consumer" configuration
+
+```bash
+$ cat << EOF > /tmp/nats-config/jetstream-consumer.json
+{
+  "durable_name": "SomeConsumer",
+  "deliver_subject": "pull",
+  "deliver_policy": "all",
+  "ack_policy": "explicit",
+  "ack_wait": 2000000000,
+  "max_deliver": -1,
+  "filter_subject": "xyz.*",
+  "replay_policy": "instant"
+}
+EOF
+```
+
+<details>
+<summary>Details</summary>
+<section style="box-shadow: 3px 3px 4px black;">
+This is the JetStream "Consumer" configuration. We will be creating the "Consumer" later using this file.
+
+This file does not need to be persisted. This is saved under `/tmp/nats-config/jetstream-consumer.json` just for the ease of the setup. It can be done within Docker image instead if you don't need to hold on to the original configuration file.
+
+Also note that the configuration will be persisted at the NATS server, so it is easy to reccreate the config file from the running NATS server.
+
+---
+
+_TODO: Add reference for each attribute_
+
+</section>
+</details>
+
+---
+
+### 5. Start NATS server with JetStream
+
+Use a separate terminal for this step, as you want to keep this process running.
+
+Also, you will be restarting this later on, so it is better to have it on separate terminal rather than running it on background.
+
+```bash
+$ docker run \
+    -it \
+    -p 4222:4222 \
+    --name my-jetstream-server \
+    --mount type=bind,source=/tmp/nats-vol,dst=/srv/jsm \
+    --mount type=bind,source=/tmp/nats-config,dst=/home/nats-config \
+    synadia/jsm:nightly server -c /home/nats-config/jetstream.conf; docker container rm my-jetstream-server
+```
+
+<details>
+<summary>Details</summary>
+<section style="box-shadow: 3px 3px 4px black;">
+A quick Docker command reference:
+
+- `-it`: For interactive process
+- `-p 4222:4222`: Use local port `4222` on the Docker host, and map to `4222` on Docker container
+- `--name my-jetstream-server`: Set a name so that we can use it to link another Docker container later
+- `--mount type=bind,source=/tmp/nats-vol,dst=/srv/jsm`: Volume mounting for NATS data and objects
+- `--mount type=bind,source=/tmp/nats-config,dst=/home/nats-config`: Volume mounting for NATS config
+- `synadia/jsm:nightly`: Docker image we are using
+- `server`: Docker CMD - this is handled by `synadia/jsm` image with `entrypoint.sh`
+- `-c /home/nats-config/jetstream.conf`: Docker ARG - this is handled by `synadia/jsm` image
+- `; docker container rm my-jetstream-server`: When stopping the ccontainer, remove the container with the same name, so that you can easily restart using the same container name
+
+</section>
+</details>
+
+---
+
+### 6. Start NATS client
+
+```bash
+$ docker run -it --link my-jetstream-server synadia/jsm:latest
+```
+
+<details>
+<summary>Details</summary>
+<section style="box-shadow: 3px 3px 4px black;">
+A quick Docker command reference:
+
+- `-it`: For interactive process
+- `--link my-jetstream-server`: Link to running NATS server
+- `synadia/jsm:latest`: Docker image we are using - if no argument is provided, it goes to interactive shell by default
+
+</section>
+</details>
+---
+
+### 7. Create JetStream "Stream" and "Consumer
+
+[ From the interactive shell from the Step #6 ]
+
+```bash
+$ nats str add --config=/home/nats-config/jetstream-stream.json
+```
+
+And then,
+
+```bash
+$ nats con add AnotherStream --config=/home/nats-config/jetstream-consumer.json
+```
+
+<details>
+<summary>Details</summary>
+<section style="box-shadow: 3px 3px 4px black;">
+Firstly, create JetStream "Stream":
+
+- `nats`: CLI provided in `synadia/jsm` Docker image
+- `str`: Short for `stream`, handles JetStream "Stream" related setup
+- `add`: Add a new "Stream"
+- `--config=/home/nats-config/jetstream-stream.json`: Use the JSON configuration from Step#3.
+
+Then, create JetStream "Consumer" - this needs to map to an exisitng "Stream".
+
+- `nats`: CLI provided in `synadia/jsm` Docker image
+- `con`: Short for `consumer`, handles JetStream "Consumer" related setup
+- `add`: Add a new "Consumer"
+- `AnotherStream`: "Stream" name "Consumer" should connect to. This is the same name used in Step#3.
+- `--config=/home/nats-config/jetstream-consumer.json`: Use the JSON configuration from Step#4.
+
+_NOTE_: For both commands, by omitting `--config` option, you can go into interactive setup mode.
+
+</section>
+</details>
+---
+
+### 8. Verify setup
+
+[ From the interactive shell from the Step #6 ]
+
+Publish some data
+
+```bash
+$ nats pub xyz.test "some random data"
+10:29:03 Published 16 bytes to "xyz.test"
+```
+
+Check "Stream" has the data and configuration in place
+
+```bash
+$ nats str info AnotherStream
+```
+
+Check "Consumer"
+
+```bash
+$ nats con info AnotherStream SomeConsumer
+```
+
+<details>
+<summary>Details</summary>
+<section style="box-shadow: 3px 3px 4px black;">
+_To be updated_
+
+</section>
+</details>
+---
