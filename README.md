@@ -28,7 +28,7 @@ $ mkdir /tmp/nats-vol     # For NATS data and objects
 
 <details>
 <summary>Details</summary>
-<section style="box-shadow: 3px 3px 4px black;">
+
 There are 2 different items to be considered for persistent setup.
 
 - Config
@@ -44,7 +44,6 @@ At (1.) NATS server startup, you can provide your config to NATS to change where
 
 The "Data" is the actual data stored in the NATS server. This refers to the actual messages sent to the server, how many are ack'ed, etc. The NATS server handles JetStream's "Stream" and "Consumer" concepts, and if you choose to create "Stream" with File storage, these can be persisted at the NATS server with files. With the above setup, we are using `/tmp/nats-vol/` as a directory to store all the NATS JetStream data, so we can restart the NATS server without losing data or configuration.
 
-</section>
 </details>
 
 ---
@@ -63,12 +62,11 @@ EOF
 
 <details>
 <summary>Details</summary>
-<section style="box-shadow: 3px 3px 4px black;">
+
 This `/tmp/nats-config/jetstream.conf` is the simplest setup.
 
 It tells the NATS server to use `/srv/jsm/` directory to store the JetStream related data. This means that any data / config will be stored under this directory when file storage is used, and also recovers from the files in this directory when the NATS server starts up.
 
-</section>
 </details>
 
 ---
@@ -96,7 +94,7 @@ EOF
 
 <details>
 <summary>Details</summary>
-<section style="box-shadow: 3px 3px 4px black;">
+
 This is the JetStream "Stream" configuration. We will be creating the "Stream" later using this file.
 
 This file does not need to be persisted. This is saved under `/tmp/nats-config/jetstream-stream.json` just for the ease of the setup. It can be done within Docker image instead if you don't need to hold on to the original configuration file.
@@ -107,7 +105,6 @@ Also note that the configuration will be persisted at the NATS server, so it is 
 
 _TODO: Add reference for each attribute_
 
-</section>
 </details>
 
 ---
@@ -131,7 +128,7 @@ EOF
 
 <details>
 <summary>Details</summary>
-<section style="box-shadow: 3px 3px 4px black;">
+
 This is the JetStream "Consumer" configuration. We will be creating the "Consumer" later using this file.
 
 This file does not need to be persisted. This is saved under `/tmp/nats-config/jetstream-consumer.json` just for the ease of the setup. It can be done within Docker image instead if you don't need to hold on to the original configuration file.
@@ -142,7 +139,6 @@ Also note that the configuration will be persisted at the NATS server, so it is 
 
 _TODO: Add reference for each attribute_
 
-</section>
 </details>
 
 ---
@@ -165,7 +161,7 @@ $ docker run \
 
 <details>
 <summary>Details</summary>
-<section style="box-shadow: 3px 3px 4px black;">
+
 A quick Docker command reference:
 
 - `-it`: For interactive process
@@ -178,7 +174,6 @@ A quick Docker command reference:
 - `-c /home/nats-config/jetstream.conf`: Docker ARG - this is handled by `synadia/jsm` image
 - `; docker container rm my-jetstream-server`: When stopping the ccontainer, remove the container with the same name, so that you can easily restart using the same container name
 
-</section>
 </details>
 
 ---
@@ -191,16 +186,14 @@ $ docker run -it --link my-jetstream-server synadia/jsm:latest
 
 <details>
 <summary>Details</summary>
-<section style="box-shadow: 3px 3px 4px black;">
+
 A quick Docker command reference:
 
 - `-it`: For interactive process
 - `--link my-jetstream-server`: Link to running NATS server
 - `synadia/jsm:latest`: Docker image we are using - if no argument is provided, it goes to interactive shell by default
 
-</section>
-</details>
----
+## </details>
 
 ### 7. Create JetStream "Stream" and "Consumer
 
@@ -218,7 +211,7 @@ $ nats con add AnotherStream --config=/home/nats-config/jetstream-consumer.json
 
 <details>
 <summary>Details</summary>
-<section style="box-shadow: 3px 3px 4px black;">
+
 Firstly, create JetStream "Stream":
 
 - `nats`: CLI provided in `synadia/jsm` Docker image
@@ -236,9 +229,7 @@ Then, create JetStream "Consumer" - this needs to map to an exisitng "Stream".
 
 _NOTE_: For both commands, by omitting `--config` option, you can go into interactive setup mode.
 
-</section>
-</details>
----
+## </details>
 
 ### 8. Verify setup
 
@@ -265,9 +256,7 @@ $ nats con info AnotherStream SomeConsumer
 
 <details>
 <summary>Details</summary>
-<section style="box-shadow: 3px 3px 4px black;">
+
 _To be updated_
 
-</section>
-</details>
----
+## </details>
