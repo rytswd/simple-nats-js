@@ -40,11 +40,11 @@ There are 2 different items to be considered for persistent setup.
 
 The "Config" is further split into 2 phases: (1.) NATS server startup configuration, and (2.) JetStream "Stream" and "Consumer" configurations.
 
-At (1.) NATS server startup, you can provide your config to NATS to change where to store JetStream related data, and other NATS feature setup. The (2.) JetStream "Stream" and "Consumer" configurations are discussed a bit more in later section. Essentially, you can consider these as a one-time setup, and we will be using them for the first time setup.
+At (1.) NATS server startup, you can provide your config to NATS to change where to store JetStream related data, and other NATS feature setup. This is used at Step#5. The (2.) JetStream "Stream" and "Consumer" configurations are discussed a bit more in later section. Essentially, you can consider these as a one-time setup, and we will be using them for the first time setup.
 
 #### Data
 
-The "Data" is the actual data stored in the NATS server. This refers to the actual messages sent to the server, how many are ack'ed, etc. The NATS server handles JetStream's "Stream" and "Consumer" concepts, and if you choose to create "Stream" with File storage, these can be persisted at the NATS server with files. With the above setup, we are using `/tmp/nats-vol/` as a directory to store all the NATS JetStream data, so we can restart the NATS server without losing data or configuration.
+The "Data" is the actual data stored in the NATS server. This refers to the actual messages sent to the NATS server, how many are ack'ed, etc. The NATS server handles JetStream's "Stream" and "Consumer" concepts, and if you choose to create "Stream" with File storage, these can be persisted at the NATS server with files. We are creating a directory `/tmp/nats-vol/` to store all the NATS JetStream data, so we can restart the NATS server without losing data or configuration.
 
 </details>
 
@@ -203,7 +203,7 @@ Docker command reference:
 - `--mount type=bind,source=/tmp/nats-config,dst=/home/nats-config`: Volume mounting for NATS config
 - `synadia/jsm:latest`: Docker image we are using - if no argument is provided, it goes to interactive shell by default
 
-## </details>
+</details>
 
 ---
 
