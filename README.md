@@ -19,7 +19,7 @@ The following is to achieve persistent JetStream setup. The setup only considers
 
 ### 1. Local directory setup
 
-Create directory on local machine so that we can persist the data and config.
+Create directory on local machine so that we can persist the config and data.
 
 ```bash
 $ mkdir /tmp/nats-config  # For NATS and JetStream configurations
@@ -203,6 +203,8 @@ Docker command reference:
 
 ## </details>
 
+---
+
 ### 7. Create JetStream "Stream" and "Consumer
 
 [ From the interactive shell from the Step #6 ]
@@ -239,6 +241,8 @@ _NOTE_: For both commands, by omitting `--config` option, you can go into intera
 
 ## </details>
 
+---
+
 ### 8. Verify setup
 
 [ From the interactive shell from the Step #6 ]
@@ -268,3 +272,91 @@ $ nats con info AnotherStream SomeConsumer
 _To be updated_
 
 ## </details>
+
+---
+
+### 9. Verify file storage persistence
+
+Using another terminal, verify that file storage holds the JetStream data.
+
+```bash
+$ tree /tmp/nats-vol
+/tmp/nats-vol
+└── jetstream
+    └── $G
+        └── streams
+            └── AnotherStream
+                ├── meta.inf
+                ├── meta.sum
+                ├── msgs
+                │   ├── 1.blk
+                │   └── 1.idx
+                └── obs
+                    └── SomeConsumer
+                        ├── meta.inf
+                        ├── meta.sum
+                        └── o.dat
+
+7 directories, 7 files
+```
+
+<details>
+<summary>Details</summary>
+
+You can see how there is a new directory `jetstream` is created under the mounted volume.
+
+- `$G` is the account used by JetStream (to be confirmed)
+- "Stream" is stored under `streams` directory
+- "Consumer" for a given Stream is stored under `obs` directory under `streams` directory
+
+</details>
+
+---
+
+### 10. Stop NATS Server
+
+Using the terminal used for Step#5, simply kill the server with `ctrl-C`.
+
+<details>
+<summary>Details</summary>
+
+At this point, NATS client won't be able to establish connection for any commands.
+
+However, the data stored in "Stream", the "Consumer" ack'ed list, etc. are all kept in the file in the local machine at `/tmp/nats-vol`.
+
+## </details>
+
+---
+
+### 11. Restart NATS Server
+
+Simply use the same command as Step#5
+
+```bash
+$ docker run \
+    -it \
+    -p 4222:4222 \
+    --name my-jetstream-server \
+    --mount type=bind,source=/tmp/nats-vol,dst=/srv/jsm \
+    --mount type=bind,source=/tmp/nats-config,dst=/home/nats-config \
+    synadia/jsm:nightly server -c /home/nats-config/jetstream.conf\
+    ; docker container rm my-jetstream-server
+```
+
+---
+
+### 12. Verify setup
+
+[ From the interactive shell from the Step #6 ]
+
+Check "Stream" has the data and configuration in place
+
+```bash
+$ nats str info AnotherStream
+```
+
+Check "Consumer"
+
+```bash
+$ nats con info AnotherStream SomeConsumer
+```
