@@ -163,7 +163,7 @@ $ docker run \
 <details>
 <summary>Details</summary>
 
-A quick Docker command reference:
+Docker command reference:
 
 - `-it`: For interactive process
 - `-p 4222:4222`: Use local port `4222` on the Docker host, and map to `4222` on Docker container
@@ -193,7 +193,7 @@ $ docker run \
 <details>
 <summary>Details</summary>
 
-A quick Docker command reference:
+Docker command reference:
 
 - `-it`: For interactive process
 - `--link my-jetstream-server`: Link to running NATS server
