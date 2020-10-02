@@ -14,7 +14,7 @@ You need the following tools:
 
 ### 1. Local directory setup
 
-Create directory on local machine so that we can persist the config and data.
+Create directory on local machine so that you can persist the config and data.
 
 ```bash
 $ {
@@ -35,11 +35,11 @@ There are 2 different items to be considered for persistent setup.
 
 The "Config" is further split into 2 phases: (1.) NATS server startup configuration, and (2.) JetStream "Stream" and "Consumer" configurations.
 
-At (1.) NATS server startup, you can provide your config to NATS to change where to store JetStream related data, and other NATS feature setup. This is used at Step#5. The (2.) JetStream "Stream" and "Consumer" configurations are discussed a bit more in later section. Essentially, you can consider these as a one-time setup, and we will be using them for the first time setup.
+At (1.) NATS server startup, you can provide your config to NATS to change where to store JetStream related data, and other NATS feature setup. This is used at Step#5. The (2.) JetStream "Stream" and "Consumer" configurations are discussed a bit more in later section. Essentially, you can consider these as a one-time setup, and you will be using them for the first time setup.
 
 #### Data
 
-The "Data" is the actual data stored in the NATS server. This refers to the actual messages sent to the NATS server, how many are ack'ed, etc. The NATS server handles JetStream's "Stream" and "Consumer" concepts, and if you choose to create "Stream" with File storage, these can be persisted at the NATS server with files. We are creating a directory `/tmp/nats-vol/` to store all the NATS JetStream data, so we can restart the NATS server without losing data or configuration.
+The "Data" is the actual data stored in the NATS server. This refers to the actual messages sent to the NATS server, how many are ack'ed, etc. The NATS server handles JetStream's "Stream" and "Consumer" concepts, and if you choose to create "Stream" with File storage, these can be persisted at the NATS server with files. This is creating a directory `/tmp/nats-vol/` to store all the NATS JetStream data, so you can restart the NATS server without losing data or configuration.
 
 </details>
 
@@ -92,7 +92,7 @@ EOF
 <details>
 <summary>Details</summary>
 
-This is the JetStream "Stream" configuration. We will be creating the "Stream" later using this file.
+This is the JetStream "Stream" configuration. You will be creating the "Stream" later using this file.
 
 This file does not need to be persisted. This is saved under `/tmp/nats-config/jetstream-stream.json` just for the ease of the setup. It can be done within Docker image instead if you don't need to hold on to the original configuration file.
 
@@ -126,7 +126,7 @@ EOF
 <details>
 <summary>Details</summary>
 
-This is the JetStream "Consumer" configuration. We will be creating the "Consumer" later using this file.
+This is the JetStream "Consumer" configuration. You will be creating the "Consumer" later using this file.
 
 This file does not need to be persisted. This is saved under `/tmp/nats-config/jetstream-consumer.json` just for the ease of the setup. It can be done within Docker image instead if you don't need to hold on to the original configuration file.
 
@@ -165,10 +165,10 @@ Docker command reference:
 - `-it`: For interactive process
 - `-p 4222:4222`: Use local port `4222` on the Docker host, and map to `4222` on Docker container
 - `-rm`: When stopping the ccontainer, remove the container, so that you can easily restart using the same container name
-- `--name my-jetstream-server`: Set a name so that we can use it to link another Docker container later
+- `--name my-jetstream-server`: Set a name so that you can use it to link another Docker container later
 - `--mount type=bind,source=/tmp/nats-vol,dst=/data/jsm`: Volume mounting for NATS data and objects
 - `--mount type=bind,source=/tmp/nats-config,dst=/home/nats-config`: Volume mounting for NATS config
-- `synadia/jsm:nightly`: Docker image we are using
+- `synadia/jsm:nightly`: Docker image you are using
 - `server`: Docker CMD - this is handled by `synadia/jsm` image with `entrypoint.sh`
 - `-c /home/nats-config/jetstream.conf`: Docker ARG - this is handled by `synadia/jsm` image
 
@@ -196,7 +196,7 @@ Docker command reference:
 - `--link my-jetstream-server`: Link to running NATS server
 - `--env NATS_URL=my-jetstream-server:4222`: Ensure connection is made to the linked container
 - `--mount type=bind,source=/tmp/nats-config,dst=/home/nats-config`: Volume mounting for NATS config
-- `synadia/jsm:latest`: Docker image we are using - if no argument is provided, it goes to interactive shell by default
+- `synadia/jsm:latest`: Docker image you are using - if no argument is provided, it goes to interactive shell by default
 
 </details>
 
