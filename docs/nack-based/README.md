@@ -1,6 +1,6 @@
 # Simple Setup with [NACK](https://github.com/nats-io/nack)
 
-This setup uses [NACK (NATS Controller for Kubernetes)](https://github.com/nats-io/nack).
+This setup uses [NACK (NATS Controllers for Kubernetes)](https://github.com/nats-io/nack).
 
 NACK works as a K8s controller.
 
