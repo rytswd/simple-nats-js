@@ -13,7 +13,6 @@ You need the following tools:
 - docker
 - kubectl
 - kind
-- helm
 
 ## Steps
 
