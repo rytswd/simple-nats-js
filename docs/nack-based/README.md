@@ -176,7 +176,7 @@ $ kubectl exec -it nats-box -- /bin/sh -l
 The following commands set the running context.
 
 ```bash
-$ {
+nats-box:~$ {
     nats context save jetstream -s nats://nats:4222
     nats context select jetstream
 }
@@ -185,9 +185,9 @@ $ {
 With the above context set, you can now start publishing message to JetStream enabled NATS Server.
 
 ```bash
-$ nats pub orders.received "order 1"
-$ nats pub orders.received "order 2"
-$ nats pub orders.other "other order ABCDEF"
+nats-box:~$ nats pub orders.received "order 1"
+nats-box:~$ nats pub orders.received "order 2"
+nats-box:~$ nats pub orders.other "other order ABCDEF"
 ```
 
 <details>
