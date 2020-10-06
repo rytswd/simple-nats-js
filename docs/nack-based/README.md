@@ -20,9 +20,8 @@ You need the following tools:
 ### 1. Start local Kubernetes cluster with KinD
 
 ```bash
-$ mkdir /tmp/nack-js
-
 $ {
+    mkdir /tmp/nack-js
     kind create cluster --config ./tools/kind-config/config-2-nodes.yaml --name kind-nats
 }
 ```
@@ -30,7 +29,9 @@ $ {
 <details>
 <summary>Details</summary>
 
-To be updated
+You can skip this step if you are using existing Kubernetes cluster. This step is only to demonstrate how to get started with absolutely no cluster runnig right now.
+
+Also, while at this step, this creates a temporary directory to store K8s definition files which we will be creating later on.
 
 </details>
 
@@ -129,3 +130,34 @@ EOF
         -f /tmp/nack-js/pull-consumer.conf
 }
 ```
+
+<details>
+<summary>Details</summary>
+
+To be updated
+
+</details>
+
+---
+
+### 5. STEP TO BE UPDATED
+
+```bash
+$ kubectl apply -f https://nats-io.github.io/k8s/tools/nats-box.yml
+$ kubectl exec -it nats-box -- /bin/sh -l
+
+$ nats context save jetstream -s nats://nats:4222
+$ nats context select jetstream
+
+$ nats pub orders.received "order 1"
+$ nats pub orders.received "order 2"
+```
+
+<details>
+<summary>Details</summary>
+
+To be updated
+
+</details>
+
+---
