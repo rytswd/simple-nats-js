@@ -37,7 +37,7 @@ Also, while at this step, this creates a temporary directory to store K8s defini
 
 ---
 
-### 2. STEP TO BE UPDATED
+### 2. Install NATS Servers and NACK JetStream Controller
 
 ```bash
 $ {
@@ -80,11 +80,13 @@ $ {
    `curl -sL https://raw.githubusercontent.com/nats-io/nack/main/deploy/deployment.yml | less`
    CRD (Custom Resource Definition) and RBAC (Role Based Access Control) are the definitions users will be interacting with.
 
+_TODO: More explanations to be added_
+
 </details>
 
 ---
 
-### 3. STEP TO BE UPDATED
+### 3. Add JetStream specific CRDs - Stream
 
 ```bash
 $ {
@@ -114,7 +116,7 @@ To be updated
 
 ---
 
-### 4. STEP TO BE UPDATED
+### 4. Add JetStream specific CRDs - Consumer
 
 ```bash
 $ {
@@ -163,7 +165,7 @@ To be updated
 
 ---
 
-### 5. STEP TO BE UPDATED
+### 5. Test and verify
 
 For testing, get into the `nats-box` Pod.
 
