@@ -40,22 +40,45 @@ Also, while at this step, this creates a temporary directory to store K8s defini
 ### 2. STEP TO BE UPDATED
 
 ```bash
-# Creates cluster of NATS Servers that are not JetStream enabled
-$ kubectl apply -f https://raw.githubusercontent.com/nats-io/k8s/master/nats-server/simple-nats.yml
+$ {
+    # 1.
+    # Deploy StatefulSet of NATS Servers that are not JetStream enabled
+    kubectl apply -f https://raw.githubusercontent.com/nats-io/k8s/master/nats-server/simple-nats.yml
 
-# Creates NATS Server with JetStream enabled as a leafnode connection
-$ kubectl apply -f https://raw.githubusercontent.com/nats-io/k8s/master/nats-server/nats-js-leaf.yml
+    # 2.
+    # Deploy StatefulSet of JetStream enabled NATS Server as a leafnode connection
+    kubectl apply -f https://raw.githubusercontent.com/nats-io/k8s/master/nats-server/nats-js-leaf.yml
 
+    # 3.
+    # Deploy JetStream specific CRDs and RBAC setup
+    kubectl apply \
+      -f https://raw.githubusercontent.com/nats-io/nack/main/deploy/crds.yml \
+      -f https://raw.githubusercontent.com/nats-io/nack/main/deploy/rbac.yml
 
-$ kubectl apply -f https://raw.githubusercontent.com/nats-io/nack/main/deploy/crds.yml
-$ kubectl apply -f https://raw.githubusercontent.com/nats-io/nack/main/deploy/rbac.yml
-$ kubectl apply -f https://raw.githubusercontent.com/nats-io/nack/main/deploy/deployment.yml
+    # 4.
+    # Deploy JetStream-Controller
+    kubectl apply -f https://raw.githubusercontent.com/nats-io/nack/main/deploy/deployment.yml
+
+    # 5. (Not required)
+    # Deploy NATS management utility for debugging
+    kubectl apply -f https://nats-io.github.io/k8s/tools/nats-box.yml
+}
 ```
 
 <details>
 <summary>Details</summary>
 
-To be updated
+1. NATS Server StatefulSet:  
+   `curl -sL https://raw.githubusercontent.com/nats-io/k8s/master/nats-server/simple-nats.yml | less`  
+   This creates a cluster of NATS Servers, which are not JetStream enabled. _TODO: Check why this is needed._
+1. JetStream enabled NATS Server:  
+   `curl -sL https://raw.githubusercontent.com/nats-io/k8s/master/nats-server/nats-js-leaf.yml | less`  
+   This creates a StatefulSet with 1 replica of JetStream enabled NATS Server. As of writing (Oct 2020), the JetStream clustering is not supported, and thus the replica count is set to 1.
+1. JetStream Controller:  
+   `curl -sL https://raw.githubusercontent.com/nats-io/nack/main/deploy/crds.yml | less`  
+   `curl -sL https://raw.githubusercontent.com/nats-io/nack/main/deploy/rbac.yml | less`  
+   `curl -sL https://raw.githubusercontent.com/nats-io/nack/main/deploy/deployment.yml | less`
+   CRD (Custom Resource Definition) and RBAC (Role Based Access Control) are the definitions users will be interacting with.
 
 </details>
 
@@ -142,15 +165,27 @@ To be updated
 
 ### 5. STEP TO BE UPDATED
 
+For testing, get into the `nats-box` Pod.
+
 ```bash
-$ kubectl apply -f https://nats-io.github.io/k8s/tools/nats-box.yml
 $ kubectl exec -it nats-box -- /bin/sh -l
+```
 
-$ nats context save jetstream -s nats://nats:4222
-$ nats context select jetstream
+The following commands set the running context.
 
+```bash
+$ {
+    nats context save jetstream -s nats://nats:4222
+    nats context select jetstream
+}
+```
+
+With the above context set, you can now start publishing message to JetStream enabled NATS Server.
+
+```bash
 $ nats pub orders.received "order 1"
 $ nats pub orders.received "order 2"
+$ nats pub orders.other "other order ABCDEF"
 ```
 
 <details>
