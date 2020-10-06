@@ -76,7 +76,7 @@ $ {
 1. JetStream Controller:  
    `curl -sL https://raw.githubusercontent.com/nats-io/nack/main/deploy/crds.yml | less`  
    `curl -sL https://raw.githubusercontent.com/nats-io/nack/main/deploy/rbac.yml | less`  
-   `curl -sL https://raw.githubusercontent.com/nats-io/nack/main/deploy/deployment.yml | less`
+   `curl -sL https://raw.githubusercontent.com/nats-io/nack/main/deploy/deployment.yml | less`  
    CRD (Custom Resource Definition) and RBAC (Role Based Access Control) are the definitions users will be interacting with.
 
 _TODO: More explanations to be added_
