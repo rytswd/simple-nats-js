@@ -38,9 +38,9 @@ func (c *Connection) Subscribe(ctx context.Context, streamName, consumerName, su
 	jsSubject := fmt.Sprintf(`$JS.API.CONSUMER.MSG.NEXT.%s.%s`, streamName, consumerName)
 	_ = jsSubject
 
-	// msg, err := mgr.NextMsg(streamName, consumerName)
-	// msg, err := consumer.NextMsgContext(ctx)
-	msg, err := c.conn.RequestWithContext(ctx, jsSubject, []byte("a"))
+	// msg, err := mgr.NextMsg(streamName, consumerName) // This does NOT work
+	// msg, err := consumer.NextMsgContext(ctx) // This does work
+	msg, err := c.conn.RequestWithContext(ctx, jsSubject, []byte("a")) // This does work
 	if errors.Is(err, nats.ErrTimeout) {
 		return nil, nil
 	}
