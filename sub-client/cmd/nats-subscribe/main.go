@@ -28,7 +28,7 @@ func main() {
 			log.Fatalf("connection error")
 		}
 		ctx, cancel := context.WithTimeout(context.Background(), 2000*time.Millisecond)
-		data, err := s.Subscribe(ctx, "*", "some_group_name")
+		data, err := s.Subscribe(ctx, streamName, consumerName, "abc.this")
 		if err != nil {
 			log.Printf("error occurred, %v\n", err)
 			cancel()

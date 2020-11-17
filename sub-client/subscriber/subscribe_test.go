@@ -2,12 +2,12 @@ package subscriber
 
 import (
 	"context"
-	"fmt"
+	"errors"
 	"reflect"
 	"testing"
 	"time"
 
-	"github.com/nats-io/jsm.go"
+	"github.com/rytswd/simple-nats-js/sub-client/testhelper"
 )
 
 func TestSubscribe(t *testing.T) {
@@ -20,9 +20,10 @@ func TestSubscribe(t *testing.T) {
 		consumerName     string
 		subscribeSubject string
 		subscribeGroup   string
+		subscribeCount   int
 
 		// output
-		want          []byte
+		want          [][]byte
 		wantErr       error
 		wantErrString string
 	}{
@@ -41,60 +42,42 @@ func TestSubscribe(t *testing.T) {
 			consumerName:     "testConsumer",
 			subscribeSubject: "some.subject",
 			subscribeGroup:   "someID",
-			want:             []byte("abc"), // does not match, force error
+			subscribeCount:   2,
+
+			want: [][]byte{
+				[]byte("some random data 1"),
+				[]byte("some random data 2"),
+			},
 		},
-		// "fail: context timed out": {
-		// 	ctx:            testctx.CancelledContext(),
-		// 	streamName:     "testStream",
-		// 	streamSubjects: []string{"some.subject"},
-		// 	prepopulate: [][]byte{
-		// 		[]byte("some data 1"),
-		// 		[]byte("some data 2"),
-		// 	},
-		// 	subscribeSubject: "some.subject",
-		// 	subscribeGroup:   "someID",
-		// 	wantErr:          context.Canceled,
-		// },
+		"fail: context timed out": {
+			ctx:            cancelledContext(),
+			streamName:     "testStream",
+			streamSubjects: []string{"some.subject"},
+			prepopulate: [][]byte{
+				[]byte("some data 1"),
+				[]byte("some data 2"),
+			},
+			consumerName:     "testConsumer",
+			subscribeSubject: "some.subject",
+			subscribeGroup:   "someID",
+			subscribeCount:   1,
+			wantErr:          context.Canceled,
+		},
 	}
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
-			// ----------------------------------------------------------------
 			// Prepare NATS JetStream
-			srv, nc, mgr := StartJetStreamServer(t)
-			defer srv.Shutdown()
-			defer nc.Flush()
+			js := testhelper.StartJSWithStreamAndConsumer(t, tc.streamName, tc.streamSubjects, tc.consumerName, tc.subscribeSubject, tc.prepopulate)
+			// js := testhelper.StartJS(t)
+			// stream := js.CreateSimpleStream(t, tc.streamName, tc.streamSubjects)
+			// js.CreateSimpleConsumer(t, stream, tc.consumerName, tc.subscribeSubject)
+			// js.Prepopulate(t, tc.subscribeSubject, tc.prepopulate)
+			defer js.Close()
 
-			// Create Stream
-			stream, err := mgr.NewStream(tc.streamName, jsm.FileStorage(), jsm.Subjects(tc.streamSubjects...))
-			if err != nil {
-				t.Fatalf("creating steram failed: %v", err)
-			}
-
-			// Create Consumer
-			consumer, err := stream.NewConsumer(
-				jsm.DurableName("some_consumer_name"),
-				jsm.FilterStreamBySubject(tc.subscribeSubject),
-				jsm.DeliverAllAvailable())
-			if err != nil {
-				t.Fatalf("creating consumer failed: %v", err)
-			}
-			_ = consumer
-
-			// Prepopulate data
-			for _, p := range tc.prepopulate {
-				nc.Publish(tc.subscribeSubject, p)
-			}
-
-			// Test consumer subscirbe
-			ms, _ := consumer.NextMsg()
-			fmt.Printf("%#v\n", ms)
-			fmt.Printf("Data: %s\n", ms.Data)
-
-			// ----------------------------------------------------------------
 			// Main test
 			s := Connection{
-				conn: nc,
+				conn: js.Conn,
 			}
 
 			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -103,13 +86,25 @@ func TestSubscribe(t *testing.T) {
 				ctx = tc.ctx
 			}
 
-			result, err := s.Subscribe(ctx, tc.subscribeSubject, tc.subscribeGroup)
-			if err != nil {
-				t.Errorf("%v", err)
-			}
-			if !reflect.DeepEqual(tc.want, result) {
-				t.Errorf("mismatch\n    want: %s\n    got:  %s\n", tc.want, result)
+			for i := 0; i < tc.subscribeCount; i++ {
+				result, err := s.Subscribe(ctx, tc.streamName, tc.consumerName, tc.subscribeSubject)
+				if err != nil {
+					if !errors.Is(err, tc.wantErr) {
+						t.Fatalf("error mismatch\n    want: %v\n    got:  %v\n", err, tc.wantErr)
+					}
+					return
+				}
+				if !reflect.DeepEqual(tc.want[i], result) {
+					t.Errorf("mismatch\n    want: %s\n    got:  %s\n", tc.want, result)
+				}
 			}
 		})
 	}
+}
+
+// CancelledContext returns context that has passed a deadline
+func cancelledContext() context.Context {
+	c, cancel := context.WithCancel(context.Background())
+	cancel()
+	return c
 }

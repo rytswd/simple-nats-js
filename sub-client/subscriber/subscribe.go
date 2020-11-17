@@ -2,6 +2,11 @@ package subscriber
 
 import (
 	"context"
+	"errors"
+	"fmt"
+
+	"github.com/nats-io/jsm.go"
+	"github.com/nats-io/nats.go"
 )
 
 // Subscribe uses the existing NATS connection to subscribe to given subject.
@@ -9,20 +14,66 @@ import (
 // not receive the same element.
 //
 // Without context handling, this can block forever.
-func (c Connection) Subscribe(ctx context.Context, subj, groupName string) ([]byte, error) {
-	sub, err := c.conn.QueueSubscribeSync(subj, groupName)
+func (c *Connection) Subscribe(ctx context.Context, streamName, consumerName, subj string) ([]byte, error) {
+	mgr, err := jsm.New(c.conn)
 	if err != nil {
 		return nil, err
 	}
-	defer sub.Unsubscribe() // Not sure if you need this
 
-	msg, err := sub.NextMsgWithContext(ctx)
+	stream, err := mgr.LoadStream(streamName)
 	if err != nil {
 		return nil, err
 	}
+
+	consumer, err := stream.LoadOrNewConsumer(consumerName,
+		jsm.DurableName(consumerName),
+		jsm.FilterStreamBySubject(subj),
+		jsm.DeliverAllAvailable(),
+	)
+	if err != nil {
+		return nil, err
+	}
+	_ = consumer
+
+	jsSubject := fmt.Sprintf(`$JS.API.CONSUMER.MSG.NEXT.%s.%s`, streamName, consumerName)
+	_ = jsSubject
+
+	// msg, err := mgr.NextMsg(streamName, consumerName)
+	// msg, err := consumer.NextMsgContext(ctx)
+	msg, err := c.conn.RequestWithContext(ctx, jsSubject, []byte("a"))
+	if errors.Is(err, nats.ErrTimeout) {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
 	msg.Respond(nil)
-
 	return msg.Data, nil
+
+	// consumer := nats.Consumer(streamName, nats.ConsumerConfig{
+	// 	Durable:       consumerName,
+	// 	DeliverPolicy: nats.DeliverNew,
+	// 	AckPolicy:     nats.AckExplicit,
+	// 	AckWait:       5 * time.Second,
+	// 	ReplayPolicy:  nats.ReplayInstant,
+	// 	FilterSubject: subj,
+	// })
+	// nats.NewInbox()
+
+	// sub, err := c.conn.QueueSubscribeSync("", groupName, consumer)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// defer sub.Unsubscribe() // Not sure if you need this
+
+	// msg, err := sub.NextMsgWithContext(ctx)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// msg.Respond(nil)
+
+	// return msg.Data, nil
 }
 
 // // SubscribeWithChannel uses the existing NATS connection to subscribe to given
