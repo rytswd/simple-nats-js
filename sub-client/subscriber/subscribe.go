@@ -9,9 +9,9 @@ import (
 	"github.com/nats-io/nats.go"
 )
 
-// Subscribe uses the existing NATS connection to subscribe to given subject.
-// The groupName is used to ensure other subscribers with the same groupName to
-// not receive the same element.
+// Subscribe uses the existing NATS connection to subscribe to given Stream and
+// Consumer. If Consumer does not exist with the given name, it creates a new
+// one with the additionally provided subject.
 //
 // Without context handling, this can block forever.
 func (c *Connection) Subscribe(ctx context.Context, streamName, consumerName, subj string) ([]byte, error) {
@@ -50,30 +50,6 @@ func (c *Connection) Subscribe(ctx context.Context, streamName, consumerName, su
 
 	msg.Respond(nil)
 	return msg.Data, nil
-
-	// consumer := nats.Consumer(streamName, nats.ConsumerConfig{
-	// 	Durable:       consumerName,
-	// 	DeliverPolicy: nats.DeliverNew,
-	// 	AckPolicy:     nats.AckExplicit,
-	// 	AckWait:       5 * time.Second,
-	// 	ReplayPolicy:  nats.ReplayInstant,
-	// 	FilterSubject: subj,
-	// })
-	// nats.NewInbox()
-
-	// sub, err := c.conn.QueueSubscribeSync("", groupName, consumer)
-	// if err != nil {
-	// 	return nil, err
-	// }
-	// defer sub.Unsubscribe() // Not sure if you need this
-
-	// msg, err := sub.NextMsgWithContext(ctx)
-	// if err != nil {
-	// 	return nil, err
-	// }
-	// msg.Respond(nil)
-
-	// return msg.Data, nil
 }
 
 // // SubscribeWithChannel uses the existing NATS connection to subscribe to given
