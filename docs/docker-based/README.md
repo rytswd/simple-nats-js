@@ -51,6 +51,7 @@ Create NATS configuration.
 
 ```bash
 $ cat << EOF > /tmp/nats-config/jetstream.conf
+http: 8222
 jetstream {
     store_dir: "/data/jsm/"
 }
@@ -149,7 +150,7 @@ Also, you will be restarting this later on, so it is better to have it on separa
 ```bash
 $ docker run \
     -it \
-    -p 4222:4222 \
+    -p 4222:4222 -p 8222:8222 \
     --rm \
     --name my-jetstream-server \
     --mount type=bind,source=/tmp/nats-vol,dst=/data/jsm \
@@ -164,6 +165,7 @@ Docker command reference:
 
 - `-it`: For interactive process
 - `-p 4222:4222`: Use local port `4222` on the Docker host, and map to `4222` on Docker container
+- `-p 8222:8222`: Use local port `8222` on the Docker host, and map to `8222` on Docker container. This is for web interface.
 - `-rm`: When stopping the ccontainer, remove the container, so that you can easily restart using the same container name
 - `--name my-jetstream-server`: Set a name so that you can use it to link another Docker container later
 - `--mount type=bind,source=/tmp/nats-vol,dst=/data/jsm`: Volume mounting for NATS data and objects
