@@ -141,6 +141,23 @@ _TODO: Add reference for each attribute_
 
 ---
 
+### 4.5. Set up Docker Network
+
+```bash
+$ docker network create simple-nats-js
+```
+
+<details>
+<summary>Details</summary>
+
+Docker Network will be used to allow NATS Client, hosted as Docker container, to be able to talk to NATS Server which is another Docker container.
+
+You can find more in https://docs.docker.com/network/bridge/
+
+</details>
+
+---
+
 ### 5. Start NATS server with JetStream
 
 Use a separate terminal for this step, as you want to keep this process running.
