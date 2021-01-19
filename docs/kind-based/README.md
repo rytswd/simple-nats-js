@@ -35,10 +35,10 @@ To be updated
 
 ```bash
 {
-    curl -sL -o tmp-simple-nats-js https://github.com/rytswd/simple-nats-js/archive/main.zip
-    unzip tmp-simple-nats-js
-    cp -r tmp-simple-nats-js/nats-jetsteram-helm .
-    rm -rf tmp-simple-nats-js
+    curl -sL -o tmp-simple-nats-js.zip https://github.com/rytswd/simple-nats-js/archive/main.zip
+    unzip tmp-simple-nats-js.zip
+    cp -r simple-nats-js-main/nats-jetstream-helm .
+    rm -rf simple-nats-js-main/ tmp-simple-nats-js.zip
 }
 ```
 
