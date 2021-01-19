@@ -79,6 +79,12 @@ To be updated
 
 ---
 
+### Cleanup
+
+```bash
+kind delete cluster --name jetstream-cluster-test
+```
+
 </details>
 
 <details>
@@ -142,6 +148,12 @@ To be updated
 </details>
 
 ---
+
+### Cleanup
+
+```bash
+kind delete cluster --name jetstream-cluster-test
+```
 
 </details>
 
