@@ -142,3 +142,9 @@ To be updated
 ---
 
 </details>
+
+## 🍸 About Custom Helm Chart
+
+The custom Helm Chart in this repo can be found in https://github.com/rytswd/simple-nats-js/tree/main/nats-jetstream-helm/.
+
+This sets up NATS JetStream cluster with provided `replicaCount` (the default is set to 3). Each Pod will be placed into separate Nodes, and RAFT setup will be driven by the `replicaCount`. However, because this configuration is only read at the server startup, this is not suitable for autoscaling.
