@@ -1,0 +1,35 @@
+{{- if and $.Values.client $.Values.client.enabled }}
+---
+# Used only for testing
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jsm-util
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: jsm-util
+  template:
+    metadata:
+      labels:
+        name: jsm-util
+    spec:
+      containers:
+        - name: jsm-util
+          image: synadia/jsm:latest
+          imagePullPolicy: IfNotPresent
+          command:
+            - "/bin/sleep"
+            - "3650d"
+          env:
+            - name: NATS_URL
+              value: {{ $.Values.cluster.serviceName }}:4222
+          resources:
+            requests:
+              cpu: 50m
+              memory: 50Mi
+            limits:
+              cpu: 150m
+              memory: 300Mi
+{{- end }}

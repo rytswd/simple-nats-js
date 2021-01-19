@@ -11,3 +11,7 @@ cluster:
   clusterName: my-jetstream-cluster
 
   volumeSpace: 100Mi
+
+client:
+  # Add client with nats CLI for debugging and administration
+  enabled: true
