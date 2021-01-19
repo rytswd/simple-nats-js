@@ -1,7 +1,15 @@
 cluster:
+  # The count here corresponds to the number of Kubernetes nodes required for
+  # the delpoyment, as StatefulSet has `podAntiAffinity` setup.
   replicaCount: 3
 
+  # serviceName is used for the Kubernetes Service name.
   serviceName: my-nats-jetstream
+
+  # clusterName is used for NATS JetStream clustering.
   clusterName: my-jetstream-cluster
+  # serverName is used for each server name, and thus StatefulSet will create
+  # Pods based on this name.
+  serverName: nats-js-server
 
   volumeSpace: 100Mi

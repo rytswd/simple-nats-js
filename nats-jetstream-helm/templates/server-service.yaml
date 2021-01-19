@@ -7,7 +7,7 @@ metadata:
     app.kubernetes.io/name: {{ $.Values.cluster.serviceName }}
 spec:
   selector:
-    app.kubernetes.io/name: nats-js
+    app.kubernetes.io/name: {{ $.Values.cluster.serverName }}
   clusterIP: None
   ports:
     - name: client

@@ -1,4 +1,3 @@
-
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -9,7 +8,7 @@ data:
   {{ $.Values.cluster.serviceName }}-{{ $e }}.conf: |
     pid_file: "/var/run/nats/nats.pid"
     http: 8222
-    server_name: nats-js-{{ $e }}
+    server_name: {{ $.Values.cluster.serverName }}-{{ $e }}
 
     jetstream {
       store_dir: "/data/jetstream/store"
@@ -23,7 +22,7 @@ data:
       routes = [
         {{- range $ii, $ee := untilStep 0 (int $.Values.cluster.replicaCount) 1 }}
         {{- if ne $e $ee }}
-        nats-route://nats-js-{{ $ee }}.{{ $.Values.cluster.serviceName }}:4242
+        nats-route://{{ $.Values.cluster.serverName }}-{{ $ee }}.{{ $.Values.cluster.serviceName }}:4242
         {{- end}}
         {{- end }}
       ]
