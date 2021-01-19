@@ -46,6 +46,7 @@ To be updated
 
 ```bash
 kind create cluster \
+    --name jetstream-cluster-test \
     --config ./tools/kind-config/config-4-nodes.yaml
 ```
 
@@ -88,6 +89,7 @@ To be updated
 
 ```bash
 kind create cluster \
+    --name jetstream-cluster-test \
     --config https://raw.githubusercontent.com/rytswd/simple-nats-js/main/tools/kind-config/config-4-nodes.yaml
 ```
 
