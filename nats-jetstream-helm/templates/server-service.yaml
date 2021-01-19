@@ -7,7 +7,7 @@ metadata:
     app.kubernetes.io/name: {{ $.Values.cluster.serviceName }}
 spec:
   selector:
-    app.kubernetes.io/name: {{ $.Values.cluster.serverName }}
+    app.kubernetes.io/name: {{ $.Values.cluster.serviceName }}
   clusterIP: None
   ports:
     - name: client
