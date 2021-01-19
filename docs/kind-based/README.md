@@ -50,7 +50,7 @@ https://github.com/rytswd/simple-nats-js/tree/main/docs/docker-based/README.md
 
 <summary>Details</summary>
 
-To be updated
+This repository contains Helm Chart for deploying NATS JetStream cluster. Because this is only for testing, the Chart is only available in this repository. The command used here is only to retrieve the Helm Chart from the repo, and remove all other files.
 
 </details>
 
@@ -108,7 +108,10 @@ kind create cluster \
 
 <summary>Details</summary>
 
-To be updated
+This step creates a local Kubernetes cluster with 4 nodes - 1 node for Kubernetes control plane, and 3 as worker nodes. This node setup matches the following step of creating a NATS JetStream cluster, as it would be deploying 3 Pods with anti-pod-affinity setup to spread each Pod into separate nodes.
+
+You can find the actual KinD configuration here:
+https://github.com/rytswd/simple-nats-js/tree/main/docs/docker-based/README.md
 
 </details>
 
