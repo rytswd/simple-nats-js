@@ -124,7 +124,7 @@ https://github.com/rytswd/simple-nats-js/tree/main/docs/docker-based/README.md
     # Copy the zipped repo to your local
     curl -sL -o tmp-simple-nats-js.zip https://github.com/rytswd/simple-nats-js/archive/main.zip
     # Unzip to retrieve the entire repo content
-    unzip tmp-simple-nats-js.zip
+    unzip -q tmp-simple-nats-js.zip
     # Pull out Helm Chart
     cp -r simple-nats-js-main/nats-jetstream-helm .
     # Remove everything but the Helm Chart
