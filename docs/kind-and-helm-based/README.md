@@ -1,4 +1,4 @@
-# Simple Setup with KinD
+# Simple Setup with KinD and Helm
 
 Similar to Docker based setup, we could have Kubernetes to host the Docker image.
 
