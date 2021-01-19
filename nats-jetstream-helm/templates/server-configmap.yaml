@@ -1,0 +1,31 @@
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $.Values.cluster.serviceName }}
+data:
+{{- range $i, $e := untilStep 0 (int $.Values.cluster.replicaCount) 1 }}
+  {{ $.Values.cluster.serviceName }}-{{ $e }}.conf: |
+    pid_file: "/var/run/nats/nats.pid"
+    http: 8222
+    server_name: nats-js-{{ $e }}
+
+    jetstream {
+      store_dir: "/data/jetstream/store"
+      max_file_store: 1G
+    }
+
+    cluster {
+      name: {{ $.Values.cluster.clusterName }}
+      listen: 0.0.0.0:4242
+
+      routes = [
+        {{- range $ii, $ee := untilStep 0 (int $.Values.cluster.replicaCount) 1 }}
+        {{- if ne $e $ee }}
+        nats-route://nats-js-{{ $ee }}.{{ $.Values.cluster.serviceName }}:4242
+        {{- end}}
+        {{- end }}
+      ]
+    }
+{{- end }}

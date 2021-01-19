@@ -1,0 +1,7 @@
+cluster:
+  replicaCount: 3
+
+  serviceName: my-nats-jetstream
+  clusterName: my-jetstream-cluster
+
+  volumeSpace: 100Mi
