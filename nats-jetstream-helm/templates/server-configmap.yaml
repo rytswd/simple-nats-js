@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ $.Values.cluster.serviceName }}
+  name: {{ $.Values.cluster.serviceName }}-config
 data:
 {{- range $i, $e := untilStep 0 (int $.Values.cluster.replicaCount) 1 }}
   {{ $.Values.cluster.serviceName }}-{{ $e }}.conf: |
