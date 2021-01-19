@@ -40,8 +40,6 @@ To be updated
     cp -r tmp-simple-nats-js/nats-jetsteram-helm .
     rm -rf tmp-simple-nats-js
 }
-
-helm install nats-js-cluster nats-jetstream-helm
 ```
 
 <details>
