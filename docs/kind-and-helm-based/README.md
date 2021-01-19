@@ -94,9 +94,13 @@ kind delete cluster --name jetstream-cluster-test
 ### 1. Start local Kubernetes clusters with KinD
 
 ```bash
-kind create cluster \
-    --name jetstream-cluster-test \
-    --config https://raw.githubusercontent.com/rytswd/simple-nats-js/main/tools/kind-config/config-4-nodes.yaml
+{
+    curl -sSL https://raw.githubusercontent.com/rytswd/simple-nats-js/main/tools/kind-config/config-4-nodes.yaml \
+        > /tmp/kind-config.yaml
+    kind create cluster \
+        --name jetstream-cluster-test \
+        --config /tmp/kind-config.yaml
+}
 ```
 
 <details>
