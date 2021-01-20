@@ -50,7 +50,7 @@ The "Data" is the actual data stored in the NATS server. This refers to the actu
 Create NATS configuration.
 
 ```bash
-$ cat << EOF > /tmp/nats-config/jetstream.conf
+cat << EOF > /tmp/nats-config/jetstream.conf
 http: 8222
 jetstream {
     store_dir: "/data/jsm/"
@@ -72,7 +72,7 @@ It tells the NATS server to use `/data/jsm/` directory to store the JetStream re
 ### 3. Create JetStream "Stream" configuration
 
 ```bash
-$ cat << EOF > /tmp/nats-config/jetstream-stream.json
+cat << EOF > /tmp/nats-config/jetstream-stream.json
 {
   "name": "AnotherStream",
   "subjects": ["xyz.*"],
@@ -110,7 +110,7 @@ _TODO: Add reference for each attribute_
 ### 4. Create JetStream "Consumer" configuration
 
 ```bash
-$ cat << EOF > /tmp/nats-config/jetstream-consumer.json
+cat << EOF > /tmp/nats-config/jetstream-consumer.json
 {
   "durable_name": "SomeConsumer",
   "deliver_subject": "pull",
@@ -144,7 +144,7 @@ _TODO: Add reference for each attribute_
 ### 4.5. Set up Docker Network
 
 ```bash
-$ docker network create simple-nats-js
+docker network create simple-nats-js
 ```
 
 <details>
@@ -165,7 +165,7 @@ Use a separate terminal for this step, as you want to keep this process running.
 Also, you will be restarting this later on, so it is better to have it on separate terminal rather than running it on background.
 
 ```bash
-$ docker run \
+docker run \
     -it \
     -p 4222:4222 -p 8222:8222 \
     --rm \
@@ -198,7 +198,7 @@ Docker command reference:
 ### 6. Start NATS client
 
 ```bash
-$ docker run \
+docker run \
     -it \
     --link my-jetstream-server \
     --env NATS_URL=my-jetstream-server:4222 \
@@ -226,13 +226,13 @@ Docker command reference:
 [ From the interactive shell from the Step #6 ]
 
 ```bash
-$ nats str add --config=/home/nats-config/jetstream-stream.json
+nats str add --config=/home/nats-config/jetstream-stream.json
 ```
 
 And then,
 
 ```bash
-$ nats con add AnotherStream --config=/home/nats-config/jetstream-consumer.json
+nats con add AnotherStream --config=/home/nats-config/jetstream-consumer.json
 ```
 
 <details>
@@ -266,20 +266,24 @@ _NOTE_: For both commands, by omitting `--config` option, you can go into intera
 Publish some data
 
 ```bash
-$ nats pub xyz.test "some random data"
+nats pub xyz.test "some random data"
+```
+
+```bash
+# Output
 10:29:03 Published 16 bytes to "xyz.test"
 ```
 
 Check "Stream" has the data and configuration in place
 
 ```bash
-$ nats str info AnotherStream
+nats str info AnotherStream
 ```
 
 Check "Consumer"
 
 ```bash
-$ nats con info AnotherStream SomeConsumer
+nats con info AnotherStream SomeConsumer
 ```
 
 <details>
@@ -297,12 +301,13 @@ The subject `xyz.test` matches the "Stream" and "Consumer" setup of `xyz.*`.
 Using another terminal, verify that file storage holds the JetStream data.
 
 ```bash
-$ tree /tmp/nats-vol
+tree /tmp/nats-vol
 ```
 
 This will result in output like the following
 
 ```
+# Output
 /tmp/nats-vol
 └── jetstream
     └── $G
@@ -357,7 +362,7 @@ However, the data stored in "Stream", the "Consumer" ack'ed list, etc. are all k
 Simply use the same command as Step#5
 
 ```bash
-$ docker run \
+docker run \
     -it \
     -p 4222:4222 \
     --rm \
@@ -376,13 +381,13 @@ $ docker run \
 Check "Stream" has the data and configuration in place
 
 ```bash
-$ nats str info AnotherStream
+nats str info AnotherStream
 ```
 
 Check "Consumer"
 
 ```bash
-$ nats con info AnotherStream SomeConsumer
+nats con info AnotherStream SomeConsumer
 ```
 
 ---
@@ -396,7 +401,7 @@ The clean-up is straightforward.
 - Remove config and data files with following commands
 
 ```bash
-$ {
+{
     rm -rf /tmp/nats-config
     rm -rf /tmp/nats-vol
 }

@@ -19,7 +19,7 @@ You need the following tools:
 ### 1. Start local Kubernetes cluster with KinD
 
 ```bash
-$ {
+{
     mkdir /tmp/nack-js
     kind create cluster --config ./tools/kind-config/config-2-nodes.yaml --name kind-nats
 }
@@ -39,7 +39,7 @@ Also, while at this step, this creates a temporary directory to store K8s defini
 ### 2. Install NATS Servers and NACK JetStream Controller
 
 ```bash
-$ {
+{
     # 1.
     # Deploy StatefulSet of NATS Servers that are not JetStream enabled
     kubectl apply -f https://raw.githubusercontent.com/nats-io/k8s/master/nats-server/simple-nats.yml
@@ -118,7 +118,7 @@ To be updated
 ### 4. Add JetStream specific CRDs - Consumer
 
 ```bash
-$ {
+{
     cat << EOF > /tmp/nack-js/push-consumer.conf
 ---
 apiVersion: jetstream.nats.io/v1beta1
@@ -169,13 +169,14 @@ To be updated
 For testing, get into the `nats-box` Pod.
 
 ```bash
-$ kubectl exec -it nats-box -- /bin/sh -l
+kubectl exec -it nats-box -- /bin/sh -l
 ```
 
 The following commands set the running context.
 
 ```bash
-nats-box:~$ {
+# From nats-box
+{
     nats context save jetstream -s nats://nats:4222
     nats context select jetstream
 }
