@@ -119,7 +119,7 @@ https://github.com/rytswd/simple-nats-js/tree/main/docs/docker-based/README.md
 ### 2.1. Prepare for NATS JetStream Cluster Install
 
 ```bash
-# Some simple commands to get Helm Chart into your local machine.
+# Simple commands to get Helm Chart into your local machine.
 {
     # Copy the zipped repo to your local
     curl -sL -o tmp-simple-nats-js.zip https://github.com/rytswd/simple-nats-js/archive/main.zip
