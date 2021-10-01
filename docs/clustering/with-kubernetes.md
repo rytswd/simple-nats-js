@@ -59,6 +59,7 @@ kubeadmConfigPatches:
     nodeRegistration:
       kubeletExtraArgs:
         authorization-mode: "AlwaysAllow"
+EOF
 ```
 
 ## Start KinD Cluster
