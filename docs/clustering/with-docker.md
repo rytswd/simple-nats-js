@@ -31,7 +31,7 @@ cluster {
   name: C1
   listen: localhost:14200
   routes: [
-    nats-route://my-jetstream-server-2:24201
+    nats-route://my-jetstream-server-2:24200
     nats-route://my-jetstream-server-3:34201
   ]
 }
@@ -97,7 +97,7 @@ docker run \
 ```bash
 docker run \
     -it \
-    -p 24222:4222 -p 28222:8222 -p 24201:24200 \
+    -p 24222:4222 -p 28222:8222 -p 24200:24200 \
     --rm \
     --name my-jetstream-server-2 \
     --network tester \
