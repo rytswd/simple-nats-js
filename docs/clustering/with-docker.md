@@ -88,7 +88,7 @@ EOF
 ```bash
 docker run \
     -it \
-    -p 14222:4222 -p 18222:8222 -p 14201:14200 \
+    -p 14222:4222 -p 18222:8222 \
     --rm \
     --name my-jetstream-server-1 \
     --network tester \
@@ -103,7 +103,7 @@ docker run \
 ```bash
 docker run \
     -it \
-    -p 24222:4222 -p 28222:8222 -p 24201:24200 \
+    -p 24222:4222 -p 28222:8222 \
     --rm \
     --name my-jetstream-server-2 \
     --network tester \
@@ -118,7 +118,7 @@ docker run \
 ```bash
 docker run \
     -it \
-    -p 34222:4222 -p 38222:8222 -p 34201:34200 \
+    -p 34222:4222 -p 38222:8222 \
     --rm \
     --name my-jetstream-server-3 \
     --network tester \
