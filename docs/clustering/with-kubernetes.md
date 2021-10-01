@@ -11,6 +11,25 @@ mkdir /tmp/nats-js-server-3
 
 ## KinD Configuration
 
+### Minimal
+
+```bash
+cat << EOF > /tmp/nats-js-cluster-setup/kind-config-minimal.yaml
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+  # https://github.com/kubernetes-sigs/kind/releases
+  - role: control-plane
+    image: kindest/node:v1.21.1@sha256:69860bda5563ac81e3c0057d654b5253219618a22ec3a346306239bba8cfa1a6
+    extraMounts:
+      - hostPath: /tmp/nats-js-server-1
+        containerPath: /data/nats-js
+EOF
+```
+
+### 4 Nodes
+
+
 ```bash
 cat << EOF > /tmp/nats-js-cluster-setup/kind-config.yaml
 kind: Cluster
