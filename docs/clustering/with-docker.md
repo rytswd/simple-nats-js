@@ -128,3 +128,17 @@ docker run \
 ```
 
 
+## Set Up Local NATS CLI
+
+```bash
+{
+    nats context add tester-cluster -s "nats://127.0.0.1:24222"
+    nats context select teser-cluster
+}
+```
+
+## Check NATS CLI Connection
+
+```bash
+nats stream ls
+```
