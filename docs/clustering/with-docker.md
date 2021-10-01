@@ -26,15 +26,17 @@ http=8222
 
 jetstream {
    store_dir=/nats/storage
+   max_file=10Gi
 }
 
 cluster {
   name: C1
-  port: 14200
+  port: 6222
 
   routes: [
-    nats-route://my-jetstream-server-2:24200
-    nats-route://my-jetstream-server-3:34200
+    nats-route://my-jetstream-server-1:6222
+    nats-route://my-jetstream-server-2:6222
+    nats-route://my-jetstream-server-3:6222
   ]
 }
 EOF
@@ -48,15 +50,17 @@ http=8222
 
 jetstream {
    store_dir=/nats/storage
+   max_file=10Gi
 }
 
 cluster {
   name: C1
-  port: 24200
+  port: 6222
 
   routes: [
-    nats-route://my-jetstream-server-1:14200
-    nats-route://my-jetstream-server-3:34200
+    nats-route://my-jetstream-server-1:6222
+    nats-route://my-jetstream-server-2:6222
+    nats-route://my-jetstream-server-3:6222
   ]
 }
 EOF
@@ -70,15 +74,17 @@ http=8222
 
 jetstream {
    store_dir=/nats/storage
+   max_file=10Gi
 }
 
 cluster {
   name: C1
-  port: 34200
+  port: 6222
 
   routes: [
-    nats-route://my-jetstream-server-1:14200
-    nats-route://my-jetstream-server-2:24200
+    nats-route://my-jetstream-server-1:6222
+    nats-route://my-jetstream-server-2:6222
+    nats-route://my-jetstream-server-3:6222
   ]
 }
 EOF
