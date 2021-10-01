@@ -19,7 +19,7 @@ nodes:
   # https://github.com/kubernetes-sigs/kind/releases
   - role: control-plane
     image: kindest/node:v1.21.1@sha256:69860bda5563ac81e3c0057d654b5253219618a22ec3a346306239bba8cfa1a6
-  - role: worker1
+  - role: worker
     image: kindest/node:v1.21.1@sha256:69860bda5563ac81e3c0057d654b5253219618a22ec3a346306239bba8cfa1a6
     kubeadmConfigPatches:
       - |
