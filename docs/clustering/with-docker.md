@@ -29,7 +29,7 @@ jetstream {
 
 cluster {
   name: C1
-  listen: localhost:14200
+  listen: localhost:14201
   routes: [
     nats-route://my-jetstream-server-2:24201
     nats-route://my-jetstream-server-3:34201
@@ -86,7 +86,7 @@ docker run \
     --rm \
     --name my-jetstream-server-1 \
     --network tester \
-    --mount type=bind,source=/tmp/nats-vol-1,dst=/data/jsm \
+    --mount type=bind,source=/tmp/nats-vol-1,dst=/nats/storage \
     --mount type=bind,source=/tmp/nats-config,dst=/home/nats-config \
     nats:2.6.1 -c /home/nats-config/cluster-server-1.conf
 ```
@@ -101,7 +101,7 @@ docker run \
     --rm \
     --name my-jetstream-server-2 \
     --network tester \
-    --mount type=bind,source=/tmp/nats-vol-2,dst=/data/jsm \
+    --mount type=bind,source=/tmp/nats-vol-2,dst=/nats/storage \
     --mount type=bind,source=/tmp/nats-config,dst=/home/nats-config \
     nats:2.6.1 -c /home/nats-config/cluster-server-2.conf
 ```
@@ -116,7 +116,7 @@ docker run \
     --rm \
     --name my-jetstream-server-3 \
     --network tester \
-    --mount type=bind,source=/tmp/nats-vol-3,dst=/data/jsm \
+    --mount type=bind,source=/tmp/nats-vol-3,dst=/nats/storage \
     --mount type=bind,source=/tmp/nats-config,dst=/home/nats-config \
     nats:2.6.1 -c /home/nats-config/cluster-server-3.conf
 ```
