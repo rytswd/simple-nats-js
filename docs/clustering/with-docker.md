@@ -32,7 +32,7 @@ cluster {
   listen: localhost:14200
   routes: [
     nats-route://my-jetstream-server-2:24200
-    nats-route://my-jetstream-server-3:34201
+    nats-route://my-jetstream-server-3:34200
   ]
 }
 EOF
@@ -51,8 +51,8 @@ cluster {
   name: C1
   listen: localhost:24200
   routes: [
-    nats-route://my-jetstream-server-1:14201
-    nats-route://my-jetstream-server-3:34201
+    nats-route://my-jetstream-server-1:14200
+    nats-route://my-jetstream-server-3:34200
   ]
 }
 EOF
@@ -71,8 +71,8 @@ cluster {
   name: C1
   listen: localhost:34200
   routes: [
-    nats-route://my-jetstream-server-1:14201
-    nats-route://my-jetstream-server-2:24201
+    nats-route://my-jetstream-server-1:14200
+    nats-route://my-jetstream-server-2:24200
   ]
 }
 EOF
@@ -82,7 +82,7 @@ EOF
 ```bash
 docker run \
     -it \
-    -p 14222:4222 -p 18222:8222 -p 14201:14200 \
+    -p 14222:4222 -p 18222:8222 -p 14200:14200 \
     --rm \
     --name my-jetstream-server-1 \
     --network tester \
@@ -112,7 +112,7 @@ docker run \
 ```bash
 docker run \
     -it \
-    -p 34222:4222 -p 38222:8222 -p 34201:34200 \
+    -p 34222:4222 -p 38222:8222 -p 34200:34200 \
     --rm \
     --name my-jetstream-server-3 \
     --network tester \
