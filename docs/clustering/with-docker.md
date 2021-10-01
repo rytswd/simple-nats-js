@@ -21,7 +21,7 @@ mkdir /tmp/nats-vol-3
 ```bash
 cat << EOF > /tmp/nats-config/cluster-server-1.conf
 server_name=n1-c1
-listen=14222
+listen=4222
 http=8222
 
 jetstream {
@@ -43,7 +43,7 @@ EOF
 ```bash
 cat << EOF > /tmp/nats-config/cluster-server-2.conf
 server_name=n2-c1
-listen=24222
+listen=4222
 http=8222
 
 jetstream {
@@ -65,7 +65,7 @@ EOF
 ```bash
 cat << EOF > /tmp/nats-config/cluster-server-3.conf
 server_name=n3-c1
-listen=34222
+listen=4222
 http=8222
 
 jetstream {
