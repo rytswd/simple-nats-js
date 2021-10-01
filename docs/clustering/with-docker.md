@@ -30,10 +30,11 @@ jetstream {
 
 cluster {
   name: C1
-  listen: localhost:14200
+  port: 14200
+
   routes: [
-    nats://my-jetstream-server-2:24200
-    nats://my-jetstream-server-3:34200
+    nats-route://my-jetstream-server-2:24200
+    nats-route://my-jetstream-server-3:34200
   ]
 }
 EOF
@@ -51,7 +52,8 @@ jetstream {
 
 cluster {
   name: C1
-  listen: localhost:24200
+  port: 24200
+
   routes: [
     nats-route://my-jetstream-server-1:14200
     nats-route://my-jetstream-server-3:34200
@@ -72,7 +74,8 @@ jetstream {
 
 cluster {
   name: C1
-  listen: localhost:34200
+  port: 34200
+
   routes: [
     nats-route://my-jetstream-server-1:14200
     nats-route://my-jetstream-server-2:24200
