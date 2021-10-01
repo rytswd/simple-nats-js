@@ -4,7 +4,7 @@
 ## Create Docker Network
 
 ```bash
-docker network tester
+docker network create tester
 ```
 
 ## Create Volumes
@@ -31,8 +31,8 @@ cluster {
   name: C1
   listen: localhost:14200
   routes: [
-    nats-route://localhost:24201
-    nats-route://localhost:34201
+    nats-route://my-jetstream-server-2:24201
+    nats-route://my-jetstream-server-3:34201
   ]
 }
 EOF
@@ -51,8 +51,8 @@ cluster {
   name: C1
   listen: localhost:24200
   routes: [
-    nats-route://localhost:14201
-    nats-route://localhost:34201
+    nats-route://my-jetstream-server-1:14201
+    nats-route://my-jetstream-server-3:34201
   ]
 }
 EOF
@@ -71,8 +71,8 @@ cluster {
   name: C1
   listen: localhost:34200
   routes: [
-    nats-route://localhost:14201
-    nats-route://localhost:24201
+    nats-route://my-jetstream-server-1:14201
+    nats-route://my-jetstream-server-2:24201
   ]
 }
 EOF
