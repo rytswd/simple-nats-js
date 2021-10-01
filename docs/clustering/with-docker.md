@@ -33,8 +33,8 @@ cluster {
   port: 14200
 
   routes: [
-    nats-route://my-jetstream-server-2:24201
-    nats-route://my-jetstream-server-3:34201
+    nats-route://my-jetstream-server-2:24200
+    nats-route://my-jetstream-server-3:34200
   ]
 }
 EOF
@@ -55,8 +55,8 @@ cluster {
   port: 24200
 
   routes: [
-    nats-route://my-jetstream-server-1:14201
-    nats-route://my-jetstream-server-3:34201
+    nats-route://my-jetstream-server-1:14200
+    nats-route://my-jetstream-server-3:34200
   ]
 }
 EOF
@@ -77,8 +77,8 @@ cluster {
   port: 34200
 
   routes: [
-    nats-route://my-jetstream-server-1:14201
-    nats-route://my-jetstream-server-2:24201
+    nats-route://my-jetstream-server-1:14200
+    nats-route://my-jetstream-server-2:24200
   ]
 }
 EOF
