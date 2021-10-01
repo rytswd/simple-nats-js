@@ -29,7 +29,7 @@ jetstream {
 
 cluster {
   name: C1
-  listen: localhost:14201
+  listen: localhost:14200
   routes: [
     nats-route://my-jetstream-server-2:24201
     nats-route://my-jetstream-server-3:34201
