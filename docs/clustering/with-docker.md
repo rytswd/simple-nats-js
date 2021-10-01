@@ -32,8 +32,8 @@ cluster {
   name: C1
   listen: localhost:14200
   routes: [
-    nats-route://my-jetstream-server-2:24200
-    nats-route://my-jetstream-server-3:34200
+    nats://my-jetstream-server-2:24200
+    nats://my-jetstream-server-3:34200
   ]
 }
 EOF
